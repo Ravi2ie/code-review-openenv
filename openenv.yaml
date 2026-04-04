@@ -1,0 +1,35 @@
+name: code-review-env
+description: >
+  A real-world OpenEnv environment where an AI agent reviews code snippets
+  for bugs, security vulnerabilities, and style issues. The agent must identify
+  issues, classify their severity, and suggest fixes. Tasks range from simple
+  syntax bugs to complex security vulnerabilities.
+version: "1.0.0"
+author: "ravisrs"
+
+env:
+  entrypoint: app.py
+  port: 7860
+
+tasks:
+  - id: task_easy_bug_detection
+    name: "Easy: Bug Detection"
+    description: >
+      Identify obvious bugs in Python code snippets such as off-by-one errors,
+      missing return statements, incorrect variable names, and type mismatches.
+    difficulty: easy
+
+  - id: task_medium_logic_review
+    name: "Medium: Logic & Best Practice Review"
+    description: >
+      Review code for logical errors, performance anti-patterns, improper error
+      handling, and violations of best practices. Requires deeper understanding
+      of code semantics.
+    difficulty: medium
+
+  - id: task_hard_security_audit
+    name: "Hard: Security Vulnerability Audit"
+    description: >
+      Detect security vulnerabilities including SQL injection, XSS, path traversal,
+      insecure deserialization, and authentication bypasses in realistic code.
+    difficulty: hard
