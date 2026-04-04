@@ -1,0 +1,16 @@
+[project]
+name = "code-review-openenv"
+version = "1.0.0"
+description = "AI code review environment with bug, logic, and security tasks"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "pydantic==2.10.4",
+    "requests==2.32.3",
+    "openai==1.58.1",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.backends._legacy:_Backend"
