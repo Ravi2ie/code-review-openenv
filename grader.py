@@ -50,10 +50,15 @@ def _keyword_match(agent_issue: CodeIssue, gt_issue: dict, line_tolerance: int =
     return min(score, 1.0)
 
 
+def _clamp_score(score: float) -> float:
+    """Clamp score to strictly between 0 and 1 (exclusive), as required by the validator."""
+    return max(0.001, min(0.999, score))
+
+
 def grade_review(agent_issues: List[CodeIssue], ground_truth: List[dict]) -> float:
     """
     Grade an agent's code review against ground truth issues.
-    Returns a score between 0.0 and 1.0.
+    Returns a score strictly between 0.0 and 1.0 (exclusive).
     
     Scoring:
     - Each ground truth issue has a weight based on severity
@@ -63,8 +68,8 @@ def grade_review(agent_issues: List[CodeIssue], ground_truth: List[dict]) -> flo
     if not ground_truth:
         # No issues expected; penalize if agent reported issues
         if not agent_issues:
-            return 1.0
-        return max(0.0, 1.0 - 0.1 * len(agent_issues))
+            return _clamp_score(1.0)
+        return _clamp_score(1.0 - 0.1 * len(agent_issues))
 
     total_weight = sum(SEVERITY_WEIGHT[gt["severity"]] for gt in ground_truth)
     earned_weight = 0.0
@@ -87,16 +92,16 @@ def grade_review(agent_issues: List[CodeIssue], ground_truth: List[dict]) -> flo
     excess = max(0, len(agent_issues) - 2 * len(ground_truth))
     fp_penalty = min(0.15, excess * 0.03)
 
-    final_score = max(0.0, min(1.0, base_score - fp_penalty))
-    return round(final_score, 4)
+    final_score = base_score - fp_penalty
+    return _clamp_score(round(final_score, 4))
 
 
 def grade_task(all_step_results: List[Dict]) -> float:
     """
     Grade an entire task (multiple snippets).
-    Returns average score across all snippets, 0.0 to 1.0.
+    Returns average score strictly between 0.0 and 1.0 (exclusive).
     """
     if not all_step_results:
-        return 0.0
+        return _clamp_score(0.0)
     scores = [r["reward"] for r in all_step_results]
-    return round(sum(scores) / len(scores), 4)
+    return _clamp_score(round(sum(scores) / len(scores), 4))
