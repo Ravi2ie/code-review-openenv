@@ -99,7 +99,7 @@ python inference.py
 - ✅ `step()` / `reset()` / `state()` endpoints
 - ✅ `openenv.yaml` configuration
 - ✅ 3 tasks with agent graders (easy → medium → hard)
-- ✅ Reward scores in 0.0–1.0 range
+- ✅ Reward scores strictly in (0, 1) range (exclusive)
 - ✅ Baseline inference script with reproducible scores
 - ✅ Dockerfile for deployment
 
